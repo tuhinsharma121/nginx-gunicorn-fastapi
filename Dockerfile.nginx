@@ -1,0 +1,33 @@
+FROM nginx:1.19.3-alpine
+# Inspired by Jason Wilder
+LABEL maintainer="Tuhin Sharma @jasonwilder.com"
+
+# Install wget and install/updates certificates
+RUN apk add --no-cache --virtual .run-deps \
+    ca-certificates bash wget openssl \
+    && update-ca-certificates
+
+
+# Configure Nginx and apply fix for very long server names
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf \
+ && sed -i 's/worker_processes  1/worker_processes  auto/' /etc/nginx/nginx.conf
+
+# Install Forego
+ADD ./deployment_config/nginx/forego /usr/local/bin/forego
+RUN chmod u+x /usr/local/bin/forego
+
+COPY ./deployment_config/nginx/docker-gen-alpine-linux-amd64-0.7.4.tar.gz /docker-gen-alpine-linux-amd64-0.7.4.tar.gz
+RUN tar -C /usr/local/bin -xvzf /docker-gen-alpine-linux-amd64-0.7.4.tar.gz
+RUN rm /docker-gen-alpine-linux-amd64-0.7.4.tar.gz
+
+COPY ./deployment_config/nginx/network_internal.conf /etc/nginx/
+
+COPY ./deployment_config/nginx/ /app/
+WORKDIR /app/
+
+ENV DOCKER_HOST unix:///tmp/docker.sock
+
+VOLUME ["/etc/nginx/certs", "/etc/nginx/dhparam"]
+
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
+CMD ["forego", "start", "-r"]
