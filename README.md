@@ -1,6 +1,6 @@
 # nginx-gunicorn-fastapi
 
-Use this command to clone the repo else docker will fail
+Use this command to clone the repo else docker will fail (for Windows)
    ```bash
    git clone https://github.com/tuhinsharma121/nginx-gunicorn-fastapi.git --config core.autocrlf=input
    ```
