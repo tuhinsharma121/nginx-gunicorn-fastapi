@@ -1,9 +1,15 @@
 # nginx-gunicorn-fastapi
 
-Use this command to clone the repo else docker will fail (for Windows)
+Prerequisite:-
+
+1. Install docker and docker-compose.
+
+2. Use this command to clone the repo else docker will fail (for Windows)
    ```bash
    git clone https://github.com/tuhinsharma121/nginx-gunicorn-fastapi.git --config core.autocrlf=input
    ```
+   
+Steps to run the project:-
 
 1. To bring the cluster up and running
 
