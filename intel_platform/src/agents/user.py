@@ -4,9 +4,6 @@ import pandas as pd
 
 class UserAgent(object):
 
-    def __init__(self):
-        pass
-
     @classmethod
     def add_new_user(cls, data_store, user_id, full_name, company_name, hashed_password, disabled):
         table = TABLE_USERS

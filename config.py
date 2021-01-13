@@ -1,0 +1,17 @@
+import os
+
+SECRET_KEY = os.getenv("SECRET_KEY", "b91ef18d42eb84307398118950d0c2b82bf5838c4c848c55a68acf58c1f8b049")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
+PG_HOST = os.getenv("PG_HOST", "localhost")
+PG_PORT = os.getenv("PG_PORT", "3456")
+PG_DBNAME = os.getenv("PG_DBNAME", "postgres")
+PG_USER = os.getenv("PG_USER", "postgres")
+PG_PASSWORD = os.getenv("PG_PASSWORD", "postgres")
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "")
+TABLE_USERS = os.getenv("TABLE_USERS", "users")
+LOGGING_FOLDER = os.getenv("LOG_FOLDER", "/tmp/intel")
+LOGGING_MAX_FILE_SIZE_BYTES = int(os.getenv("LOGGING_MAX_FILE_SIZE_BYTES", "40960"))
+LOGGING_LOCAL_BACK_UP_COUNT = int(os.getenv("LOGGING_LOCAL_BACK_UP_COUNT", "5"))
+AWS_LOGGING_BUCKET_NAME = os.getenv("AWS_LOGGING_BUCKET_NAME", "bucket")

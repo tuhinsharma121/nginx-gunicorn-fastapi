@@ -1,67 +1,42 @@
 version: '3'
 services:
-  nginx:
+  intel-test:
     build:
       context: ""
-      dockerfile: ./Dockerfile.nginx
-    image: nginx:latest
-    ports:
-      - "8008:80"
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    networks:
-      - nginx_intel_nw
-    environment:
-      - DEFAULT_HOST=intel
-    depends_on:
-      - intel
-  intel:
-    build:
-      context: ""
-      dockerfile: ./Dockerfile.intel
-    image: intel:latest
+      dockerfile: ./Dockerfile.intel-test
+    image: intel-test:latest
     entrypoint:
       - /bin/entrypoint.sh
     env_file:
-      - intel.env
+      - intel-test.env
     ports:
       - "5678"
     environment:
       - VIRTUAL_HOST=intel
       - VIRTUAL_PORT=5678
       - SERVICE_PORT=5678
-      - PG_HOST=db
+      - PG_HOST=db-test
       - PG_PORT=5432
       - PG_DBNAME=postgres
       - PG_USER=postgres
       - PG_PASSWORD=postgres
-    networks:
-      - nginx_intel_nw
-      - intel_db_nw
     depends_on:
-      db:
+      db-test:
         condition: service_healthy
-  db:
+  db-test:
     restart: always
     image: postgres:alpine
-    networks:
-      - intel_db_nw
     ports:
-      - "5432"
+      - "3456:5432"
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./var/pgdata/intel:/var/lib/postgresql/data
+      - ./var/pgdata/intel-test:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
       timeout: 5s
       retries: 5
-networks:
-  nginx_intel_nw:
-    driver: bridge
-  intel_db_nw:
-    driver: bridge

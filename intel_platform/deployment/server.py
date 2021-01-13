@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 import jwt
+import uvicorn
 from fastapi import Depends, HTTPException, status
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,7 +15,6 @@ from intel_platform.src.agents.container import ContainerAgent
 from intel_platform.src.agents.user import UserAgent
 from utils.data_store.rds_data_store import RDSDataStore
 from utils.logger.pylogger import get_logger
-import subprocess
 
 logger = get_logger("server", "INFO")
 
@@ -214,3 +214,7 @@ async def get_secure_container_id(*, message: Request,
     response.container_id = ContainerAgent.get_contaner_id()
     response.message = "{name} from {company}".format(name=message.name, company=message.company)
     return response
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=9009)

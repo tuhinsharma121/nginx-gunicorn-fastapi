@@ -1,0 +1,52 @@
+FROM ubuntu:18.04
+MAINTAINER Tuhin Sharma "tuhinsharma121@gmail.com"
+
+# --------------------------------------------------------------------------------------------------
+# install ubuntu essentials
+# --------------------------------------------------------------------------------------------------
+
+RUN apt-get update --fix-missing && \
+    apt-get -y install build-essential && \
+    apt-get install -y apt-utils && \
+    apt-get -y install zlib1g-dev && \
+    apt-get install -y libssl-dev && \
+    apt-get install -y libbz2-dev && \
+    apt-get install -y liblzma-dev && \
+    apt-get -y install wget
+
+# --------------------------------------------------------------------------------------------------
+# install python 3.6.8
+# --------------------------------------------------------------------------------------------------
+ENV PYTHON_VERSION 3.6.8
+RUN wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz && \
+    tar -xzf Python-$PYTHON_VERSION.tgz && \
+    cd Python-$PYTHON_VERSION && \
+    ./configure && \
+    make && \
+    make install
+
+
+## --------------------------------------------------------------------------------------------------
+## install python packages
+## --------------------------------------------------------------------------------------------------
+
+COPY ./requirements-test.txt /requirements.txt
+RUN pip3 install -r /requirements.txt
+
+# --------------------------------------------------------------------------------------------------
+# copy src code and scripts into root dir /
+# --------------------------------------------------------------------------------------------------
+
+COPY ./intel_platform /intel_platform
+COPY ./utils /utils
+COPY ./config.py.template /config.py
+COPY ./tests /tests
+COPY ./init.sql /init.sql
+
+# --------------------------------------------------------------------------------------------------
+# add entrypoint for the container
+# --------------------------------------------------------------------------------------------------
+
+ADD ./test_config/scripts/entrypoint.sh /bin/entrypoint.sh
+RUN chmod +x /bin/entrypoint.sh
+ENTRYPOINT ["/bin/entrypoint.sh"]

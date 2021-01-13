@@ -1,0 +1,2 @@
+user_id,full_name,company_name,hashed_password,disabled
+test_user_id,test_full_name,test_company_name,test_hashed_password,False
