@@ -30,8 +30,8 @@ tags_metadata = [
 
 ]
 
-app = FastAPI(title="nginx-gunicorn-fastapi",
-              description="Apis for nginx-gunicorn-fastapi", docs_url="/hxdocs", redoc_url=None,
+app = FastAPI(title=APP_NAME,
+              description="Apis for {app_name}".format(app_name=APP_NAME), docs_url="/hxdocs", redoc_url=None,
               version="1.0.0", openapi_tags=tags_metadata, openapi_url="/api/v1/schemas/openapi.json")
 
 app.rds_data_store = None

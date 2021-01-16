@@ -1,20 +1,22 @@
 version: '3'
 services:
-  nginx:
-    build:
-      context: ""
-      dockerfile: ./Dockerfile.nginx
-    image: nginx:latest
+  traefik:
+    image: "traefik:v2.3"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
     ports:
       - "8008:80"
+      - "8080:8080"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    networks:
-      - nginx_intel_nw
-    environment:
-      - DEFAULT_HOST=intel
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
     depends_on:
       - intel
+    networks:
+      - traefik_intel_nw
+      - intel_db_nw
   intel:
     build:
       context: ""
@@ -35,13 +37,16 @@ services:
       - PG_DBNAME=postgres
       - PG_USER=postgres
       - PG_PASSWORD=postgres
-      - APP_NAME=nginx-gunicorn-fastapi
+      - APP_NAME=traefik-gunicorn-fastapi
     networks:
-      - nginx_intel_nw
       - intel_db_nw
+      - traefik_intel_nw
     depends_on:
       db:
         condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.intel.rule=hostregexp(`{host:.+}`)"
   db:
     restart: always
     image: postgres:alpine
@@ -61,8 +66,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
 networks:
-  nginx_intel_nw:
+  traefik_intel_nw:
     driver: bridge
   intel_db_nw:
     driver: bridge
