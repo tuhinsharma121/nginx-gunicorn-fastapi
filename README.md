@@ -2,7 +2,7 @@
 
 This is a standard skeleton of a python ML project that I have built. 
 
-- web server/load balancer : nginx
+- web server/load balancer : nginx/traefik
 - application server : gunicorn
 - application server worker : uvicorn
 - rest api layer : fastapi
@@ -70,6 +70,12 @@ Steps to run the project:-
    
 2. To bring the cluster up and running
 
+    Using traefik
+    ```bash
+    docker-compose -f docker-compose-traefik-gunicorn-fastapi.yml build
+    docker-compose -f docker-compose-traefik-gunicorn-fastapi.yml up -d --remove-orphans
+    ```
+    Using nginx
     ```bash
     docker-compose -f docker-compose-nginx-gunicorn-fastapi.yml build
     docker-compose -f docker-compose-nginx-gunicorn-fastapi.yml up -d --remove-orphans
