@@ -3,9 +3,9 @@
 This is a standard skeleton of a python ML project that I have built. 
 
 - web server/load balancer : nginx/traefik
-- application server : gunicorn
-- application server worker : uvicorn
-- rest api layer : fastapi
+- application server : gunicorn (WSGI)
+- application server worker : uvicorn (ASGI)
+- rest api layer : fastapi (async)
 - db : postgres
 - deployment : docker/docker-compose
 
