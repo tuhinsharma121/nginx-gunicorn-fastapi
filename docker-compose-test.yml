@@ -27,7 +27,7 @@ services:
     restart: always
     image: postgres:alpine
     ports:
-      - "3456:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
