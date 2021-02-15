@@ -1,6 +1,6 @@
 FROM nginx:1.19.3-alpine
 # Inspired by Jason Wilder
-LABEL maintainer="Tuhin Sharma @jasonwilder.com"
+LABEL maintainer="Tuhin Sharma @tuhinsharma121@gmail.com"
 
 # Install wget and install/updates certificates
 RUN apk add --no-cache --virtual .run-deps \
